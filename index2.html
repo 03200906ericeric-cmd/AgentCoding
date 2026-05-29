@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eric | Professional Bento Showcase</title>
+    <meta name="description" content="Professional light-themed developer portfolio showcasing agentic engineering and web applications by 03200906ericeric-cmd.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Vector Icons (A11y compliant, No Emojis) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Design Tokens - Light Theme (Default & Professional) */
+            --bg-base: #f8fafc;
+            --bg-bento: #ffffff;
+            --bg-bento-hover: #fcfcfc;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border-glow: rgba(79, 70, 229, 0.04);
+            --border-color: #e2e8f0;
+            --border-hover: rgba(79, 70, 229, 0.4);
+            
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.08);
+            --secondary: #7c3aed;
+            --secondary-glow: rgba(124, 58, 237, 0.06);
+            --accent: #0891b2;
+            --accent-glow: rgba(8, 145, 178, 0.08);
+            --success: #10b981;
+            
+            --shadow-bento: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 20px 25px -5px rgba(79, 70, 229, 0.1), 0 10px 10px -5px rgba(79, 70, 229, 0.04);
+            --transition-main: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dark-mode {
+            /* Design Tokens - Dark Theme */
+            --bg-base: #090d16;
+            --bg-bento: rgba(17, 24, 39, 0.7);
+            --bg-bento-hover: rgba(28, 36, 56, 0.85);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-glow: rgba(99, 102, 241, 0.15);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(99, 102, 241, 0.4);
+            
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.2);
+            --secondary: #a855f7;
+            --secondary-glow: rgba(168, 85, 247, 0.15);
+            --accent: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.15);
+            
+            --shadow-bento: 0 4px 30px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 10px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            position: relative;
+        }
+
+        /* Subtle professional background pattern */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(#e2e8f0 1.2px, transparent 1.2px);
+            background-size: 24px 24px;
+            opacity: 0.7;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .dark-mode::before {
+            background-image: radial-gradient(#1e293b 1.2px, transparent 1.2px);
+            opacity: 0.6;
+        }
+
+        /* Ambient glows for light mode (extremely soft) */
+        .ambient-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(160px);
+            z-index: -1;
+            opacity: 0.35;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .glow-1 {
+            top: -100px;
+            left: -100px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, rgba(255,255,255,0) 70%);
+        }
+
+        .glow-2 {
+            bottom: -100px;
+            right: -100px;
+            background: radial-gradient(circle, var(--secondary-glow) 0%, rgba(255,255,255,0) 70%);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px var(--primary-glow);
+        }
+
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .theme-toggle {
+            background: var(--bg-bento);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            cursor: pointer;
+            padding: 0.7rem 1.25rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: var(--shadow-bento);
+            transition: var(--transition-main);
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-1.5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: minmax(160px, auto);
+            gap: 1.5rem;
+        }
+
+        /* Bento Card Styles */
+        .bento-card {
+            background-color: var(--bg-bento);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.75rem;
+            box-shadow: var(--shadow-bento);
+            transition: var(--transition-main);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Grid Spans */
+        .span-2-cols { grid-column: span 2; }
+        .span-3-cols { grid-column: span 3; }
+        .span-4-cols { grid-column: span 4; }
+        .span-2-rows { grid-row: span 2; }
+
+        /* Card: Profile */
+        .card-profile {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 2rem;
+            padding: 2.25rem;
+        }
+
+        .profile-img-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            flex-shrink: 0;
+        }
+
+        .profile-glow {
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--bg-base);
+        }
+
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .badge-dev {
+            background: var(--primary-glow);
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            width: fit-content;
+            border: 1px solid rgba(79, 70, 229, 0.15);
+            letter-spacing: 0.5px;
+        }
+
+        .profile-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        .profile-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .profile-meta-tags {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.25rem;
+        }
+
+        .meta-tag {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .meta-tag i {
+            color: var(--primary);
+        }
+
+        /* Card: Interactive Clock */
+        .card-clock {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.02), rgba(8, 145, 178, 0.02));
+        }
+
+        .clock-time {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+        }
+
+        .clock-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .clock-greeting {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-top: 0.4rem;
+        }
+
+        /* Card: Tech Stack Filter */
+        .card-skills {
+            justify-content: flex-start;
+            gap: 1rem;
+        }
+
+        .card-skills-title {
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-skills-title i {
+            color: var(--accent);
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .filter-badge {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.45rem 0.85rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-main);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .dark-mode .filter-badge {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .filter-badge:hover {
+            border-color: var(--primary);
+            background: var(--primary-glow);
+            transform: translateY(-1.5px);
+        }
+
+        .filter-badge.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 10px var(--primary-glow);
+        }
+
+        /* Card: Repository Card */
+        .card-repo {
+            justify-content: space-between;
+            gap: 1.25rem;
+            min-height: 270px;
+        }
+
+        .repo-top {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .repo-badge-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .r-badge {
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .r-badge-primary {
+            background: rgba(8, 145, 178, 0.08);
+            color: var(--accent);
+            border: 1px solid rgba(8, 145, 178, 0.15);
+        }
+
+        .r-badge-secondary {
+            background: rgba(124, 58, 237, 0.08);
+            color: var(--secondary);
+            border: 1px solid rgba(124, 58, 237, 0.15);
+        }
+
+        .repo-lang-icon {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .repo-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .repo-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .repo-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .repo-meta-info {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .meta-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .meta-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .dot-js { background-color: #eab308; }
+        .dot-html { background-color: #f97316; }
+
+        .btn-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 10px var(--primary-glow);
+            transition: var(--transition-main);
+            text-align: center;
+            min-height: 44px;
+        }
+
+        .btn-action:hover {
+            opacity: 0.95;
+            transform: translateY(-1.5px);
+            box-shadow: 0 6px 14px var(--primary-glow);
+        }
+
+        /* Card: Copyable Email */
+        .card-contact {
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(8, 145, 178, 0.02), rgba(79, 70, 229, 0.02));
+        }
+
+        .contact-icon {
+            font-size: 1.6rem;
+            color: var(--accent);
+            margin-bottom: 0.4rem;
+        }
+
+        .contact-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .contact-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+
+        /* Card: Developer Quote */
+        .card-quote {
+            justify-content: center;
+            font-style: italic;
+            text-align: center;
+            padding: 1.5rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        .quote-icon {
+            font-size: 1.2rem;
+            color: var(--border-hover);
+            margin-bottom: 0.35rem;
+            display: block;
+        }
+
+        /* Card: Stats */
+        .card-stats {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            gap: 1rem;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 0.15rem;
+        }
+
+        /* Toast Alerts */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast-msg {
+            background-color: var(--bg-bento);
+            border: 1px solid var(--success);
+            color: var(--text-main);
+            padding: 0.9rem 1.4rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .toast-msg i {
+            color: var(--success);
+        }
+
+        @keyframes toastIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            padding: 2rem 0 1rem 0;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Breakpoints */
+        @media (max-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .span-4-cols { grid-column: span 3; }
+        }
+
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: auto;
+            }
+            .span-2-cols, .span-3-cols, .span-4-cols { grid-column: span 2; }
+            
+            .card-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+            .span-2-cols, .span-3-cols, .span-4-cols { grid-column: span 1; }
+            
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Soft Ambient Background Glows -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <header>
+            <div class="logo-group">
+                <div class="logo-icon"><i class="fa-solid fa-compass"></i></div>
+                <div class="logo-text">Eric.Dev</div>
+            </div>
+            <button class="theme-toggle" id="theme-btn">
+                <i class="fa-solid fa-moon"></i>
+                <span>Dark Mode</span>
+            </button>
+        </header>
+
+        <!-- Bento Grid Board -->
+        <div class="bento-grid">
+            
+            <!-- Hero / Profile Bento Card (Large Layout) -->
+            <div class="bento-card span-3-cols span-2-rows card-profile">
+                <div class="profile-img-container">
+                    <div class="profile-glow"></div>
+                    <img src="https://avatars.githubusercontent.com/u/278893907?v=4" alt="Developer Avatar" class="profile-img">
+                </div>
+                <div class="profile-details">
+                    <div class="badge-dev"><i class="fa-solid fa-shield-halved"></i> UI/UX Pro Max Edition</div>
+                    <h1 class="profile-name">Eric (03200906ericeric-cmd)</h1>
+                    <p class="profile-desc">
+                        A frontend engineer specializing in clean, professional layouts, custom interactive widgets, and automated agentic coding. Designing modern user interfaces following premium visual standards and fast interaction models.
+                    </p>
+                    <div class="profile-meta-tags">
+                        <div class="meta-tag"><i class="fa-solid fa-location-dot"></i><span>Taiwan</span></div>
+                        <div class="meta-tag"><i class="fa-solid fa-envelope"></i><span>03200906ericeric-cmd@noreply.com</span></div>
+                        <div class="meta-tag"><i class="fa-brands fa-github"></i><span>03200906ericeric-cmd</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Local Time Clock Card -->
+            <div class="bento-card card-clock">
+                <div>
+                    <div class="clock-time" id="clock-time">00:00:00</div>
+                    <div class="clock-date" id="clock-date">Taipei, Taiwan</div>
+                </div>
+                <div class="clock-greeting" id="clock-greeting">Loading...</div>
+            </div>
+
+            <!-- Copyable Email Card -->
+            <div class="bento-card card-contact" id="email-card">
+                <div class="contact-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                <div>
+                    <div class="contact-title">Copy Contact Info</div>
+                    <div class="contact-sub">03200906ericeric-cmd@noreply.com</div>
+                </div>
+            </div>
+
+            <!-- Tech Stack & Interactive Tag Filter Card -->
+            <div class="bento-card span-2-cols card-skills">
+                <div class="card-skills-title">
+                    <i class="fa-solid fa-cubes"></i>
+                    <span>Interactive Filter Tools</span>
+                </div>
+                <div class="skills-container">
+                    <button class="filter-badge active" data-filter="all"><i class="fa-solid fa-list"></i> Show All</button>
+                    <button class="filter-badge" data-filter="javascript"><i class="fa-brands fa-js" style="color: #eab308;"></i> JavaScript</button>
+                    <button class="filter-badge" data-filter="html"><i class="fa-brands fa-html5" style="color: #f97316;"></i> HTML</button>
+                    <button class="filter-badge" data-filter="audio"><i class="fa-solid fa-volume-high"></i> Web Audio</button>
+                    <button class="filter-badge" data-filter="canvas"><i class="fa-solid fa-shapes"></i> Canvas API</button>
+                </div>
+            </div>
+
+            <!-- Stats Showcase Card -->
+            <div class="bento-card card-stats">
+                <div class="stat-box">
+                    <div class="stat-value">2</div>
+                    <div class="stat-label">Repositories</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Responsive</div>
+                </div>
+            </div>
+
+            <!-- Developer Quote Bento Card -->
+            <div class="bento-card card-quote">
+                <span class="quote-icon"><i class="fa-solid fa-quote-left"></i></span>
+                <p>"Simplicity is the ultimate sophistication in professional UI design."</p>
+            </div>
+
+            <!-- Repository Card 1: Agentic-Coding -->
+            <div class="bento-card span-2-cols card-repo" data-tags="javascript audio canvas">
+                <div class="repo-top">
+                    <div class="repo-badge-row">
+                        <span class="r-badge r-badge-primary"><i class="fa-solid fa-gamepad"></i> Playable Web Game</span>
+                        <i class="fa-brands fa-js repo-lang-icon" style="color: #eab308;"></i>
+                    </div>
+                    <h3 class="repo-name">Agentic-Coding</h3>
+                    <p class="repo-desc">
+                        An autonomously developed Tetris game featuring high-DPI canvas render grids, SRS rotation wall kicks, ghost dropdown outlines, and dynamic audio synthesis using the Web Audio API without external file dependencies.
+                    </p>
+                </div>
+                <div class="repo-bottom">
+                    <div class="repo-meta-info">
+                        <div class="meta-info-item">
+                            <span class="meta-dot dot-js"></span>
+                            <span>JavaScript</span>
+                        </div>
+                        <div class="meta-info-item">
+                            <i class="fa-solid fa-star"></i>
+                            <span>0 stars</span>
+                        </div>
+                        <div class="meta-info-item">
+                            <i class="fa-solid fa-code-fork"></i>
+                            <span>0 forks</span>
+                        </div>
+                    </div>
+                    <a href="https://github.com/03200906ericeric-cmd/Agentic-Coding" target="_blank" class="btn-action">
+                        <i class="fa-brands fa-github"></i> Explore Codebase
+                    </a>
+                </div>
+            </div>
+
+            <!-- Repository Card 2: AgentCoding -->
+            <div class="bento-card span-2-cols card-repo" data-tags="html">
+                <div class="repo-top">
+                    <div class="repo-badge-row">
+                        <span class="r-badge r-badge-secondary"><i class="fa-solid fa-globe"></i> Interactive Portfolio</span>
+                        <i class="fa-brands fa-html5 repo-lang-icon" style="color: #f97316;"></i>
+                    </div>
+                    <h3 class="repo-name">AgentCoding</h3>
+                    <p class="repo-desc">
+                        A premium personal homepage designed in a Bento-Grid structure. Includes real-time clock synchronization, tag-based interactive repository filtering, and light/dark theme variables fully compatible with GitHub Pages hosting.
+                    </p>
+                </div>
+                <div class="repo-bottom">
+                    <div class="repo-meta-info">
+                        <div class="meta-info-item">
+                            <span class="meta-dot dot-html"></span>
+                            <span>HTML / CSS</span>
+                        </div>
+                        <div class="meta-info-item">
+                            <i class="fa-solid fa-star"></i>
+                            <span>0 stars</span>
+                        </div>
+                        <div class="meta-info-item">
+                            <i class="fa-solid fa-code-fork"></i>
+                            <span>0 forks</span>
+                        </div>
+                    </div>
+                    <a href="https://github.com/03200906ericeric-cmd/AgentCoding" target="_blank" class="btn-action">
+                        <i class="fa-brands fa-github"></i> Explore Codebase
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 Eric. All rights reserved.</p>
+            <p>Integrated with <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank">UI/UX Pro Max</a> design system. Crafted by <a href="https://github.com/03200906ericeric-cmd" target="_blank">03200906ericeric-cmd</a>.</p>
+        </footer>
+
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-box"></div>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeBtn = document.getElementById('theme-btn');
+        const themeIcon = themeBtn.querySelector('i');
+        const themeText = themeBtn.querySelector('span');
+
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.className = 'fa-solid fa-sun';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.className = 'fa-solid fa-moon';
+                themeText.textContent = 'Dark Mode';
+            }
+        });
+
+        // Real-time Clock Widget
+        function updateTime() {
+            const timeEl = document.getElementById('clock-time');
+            const greetingEl = document.getElementById('clock-greeting');
+            
+            const now = new Date();
+            
+            // Taipei Time Zone
+            const options = { timeZone: 'Asia/Taipei', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            const timeStr = now.toLocaleTimeString('zh-TW', options);
+            timeEl.textContent = timeStr;
+            
+            // Taipei Hour for greeting
+            const formatter = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Taipei', hour: 'numeric', hour12: false });
+            const hour = parseInt(formatter.format(now));
+
+            let greeting = "Welcome";
+            if (hour >= 5 && hour < 12) greeting = "Good morning";
+            else if (hour >= 12 && hour < 18) greeting = "Good afternoon";
+            else if (hour >= 18 && hour < 22) greeting = "Good evening";
+            else greeting = "Night mode active";
+
+            greetingEl.textContent = greeting;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Copy to Clipboard & Toast Alert Widget
+        const emailCard = document.getElementById('email-card');
+        const toastBox = document.getElementById('toast-box');
+        
+        emailCard.addEventListener('click', () => {
+            const email = "03200906ericeric-cmd@noreply.com";
+            navigator.clipboard.writeText(email).then(() => {
+                showToast("Email address copied successfully!");
+            }).catch(err => {
+                showToast("Failed to copy clipboard.");
+            });
+        });
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast-msg';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span>${message}</span>`;
+            toastBox.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'none';
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Tech Stack Filters Widget
+        const filterBtns = document.querySelectorAll('.filter-badge');
+        const repoCards = document.querySelectorAll('.card-repo');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Toggle active button style
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                // Filter cards with animations
+                repoCards.forEach(card => {
+                    const cardTags = card.getAttribute('data-tags').split(' ');
+                    
+                    if (filterValue === 'all' || cardTags.includes(filterValue)) {
+                        card.style.display = 'flex';
+                        card.style.opacity = '0';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                            card.style.transition = 'all 0.3s ease';
+                        }, 50);
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
