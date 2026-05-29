@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eric | Supabase Dynamic Bento Showcase</title>
+    <meta name="description" content="Dynamic professional developer portfolio loading repositories from Supabase. Built by 03200906ericeric-cmd.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Vector Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        :root {
+            /* Design Tokens - Light Theme (Default & Professional) */
+            --bg-base: #f8fafc;
+            --bg-bento: #ffffff;
+            --bg-bento-hover: #fcfcfc;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border-glow: rgba(79, 70, 229, 0.04);
+            --border-color: #e2e8f0;
+            --border-hover: rgba(79, 70, 229, 0.4);
+            
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.08);
+            --secondary: #7c3aed;
+            --secondary-glow: rgba(124, 58, 237, 0.06);
+            --accent: #0891b2;
+            --accent-glow: rgba(8, 145, 178, 0.08);
+            --success: #10b981;
+            --danger: #ef4444;
+            
+            --shadow-bento: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 20px 25px -5px rgba(79, 70, 229, 0.1), 0 10px 10px -5px rgba(79, 70, 229, 0.04);
+            --transition-main: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dark-mode {
+            /* Design Tokens - Dark Theme */
+            --bg-base: #090d16;
+            --bg-bento: rgba(17, 24, 39, 0.7);
+            --bg-bento-hover: rgba(28, 36, 56, 0.85);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-glow: rgba(99, 102, 241, 0.15);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(99, 102, 241, 0.4);
+            
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.2);
+            --secondary: #a855f7;
+            --secondary-glow: rgba(168, 85, 247, 0.15);
+            --accent: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.15);
+            
+            --shadow-bento: 0 4px 30px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 10px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            position: relative;
+        }
+
+        /* Subtle grid background pattern */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(#e2e8f0 1.2px, transparent 1.2px);
+            background-size: 24px 24px;
+            opacity: 0.7;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .dark-mode::before {
+            background-image: radial-gradient(#1e293b 1.2px, transparent 1.2px);
+            opacity: 0.6;
+        }
+
+        /* Ambient background glows */
+        .ambient-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(160px);
+            z-index: -1;
+            opacity: 0.35;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .glow-1 {
+            top: -100px;
+            left: -100px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, rgba(255,255,255,0) 70%);
+        }
+
+        .glow-2 {
+            bottom: -100px;
+            right: -100px;
+            background: radial-gradient(circle, var(--secondary-glow) 0%, rgba(255,255,255,0) 70%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px var(--primary-glow);
+        }
+
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .config-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-main);
+        }
+
+        .config-btn:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: var(--bg-bento);
+            transform: rotate(45deg);
+        }
+
+        .theme-toggle {
+            background: var(--bg-bento);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            cursor: pointer;
+            padding: 0.7rem 1.25rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: var(--shadow-bento);
+            transition: var(--transition-main);
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-1.5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: minmax(160px, auto);
+            gap: 1.5rem;
+        }
+
+        /* Bento Cards */
+        .bento-card {
+            background-color: var(--bg-bento);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.75rem;
+            box-shadow: var(--shadow-bento);
+            transition: var(--transition-main);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Grid Spans */
+        .span-2-cols { grid-column: span 2; }
+        .span-3-cols { grid-column: span 3; }
+        .span-4-cols { grid-column: span 4; }
+        .span-2-rows { grid-row: span 2; }
+
+        /* Profile Card */
+        .card-profile {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 2rem;
+            padding: 2.25rem;
+        }
+
+        .profile-img-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            flex-shrink: 0;
+        }
+
+        .profile-glow {
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--bg-base);
+        }
+
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .badge-dev {
+            background: rgba(16, 185, 129, 0.08);
+            color: var(--success);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            width: fit-content;
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .profile-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+        }
+
+        .profile-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .profile-meta-tags {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.25rem;
+        }
+
+        .meta-tag {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .meta-tag i {
+            color: var(--primary);
+        }
+
+        /* Clock Card */
+        .card-clock {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.02), rgba(8, 145, 178, 0.02));
+        }
+
+        .clock-time {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+        }
+
+        .clock-date {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .clock-greeting {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            margin-top: 0.4rem;
+        }
+
+        /* Interactive Skills Filter */
+        .card-skills {
+            justify-content: flex-start;
+            gap: 1rem;
+        }
+
+        .card-skills-title {
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-skills-title i {
+            color: var(--accent);
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .filter-badge {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.45rem 0.85rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-main);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-transform: capitalize;
+        }
+
+        .dark-mode .filter-badge {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .filter-badge:hover {
+            border-color: var(--primary);
+            background: var(--primary-glow);
+            transform: translateY(-1.5px);
+        }
+
+        .filter-badge.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 10px var(--primary-glow);
+        }
+
+        /* Repository Bento Cards */
+        .card-repo {
+            justify-content: space-between;
+            gap: 1.25rem;
+            min-height: 270px;
+        }
+
+        .repo-top {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .repo-badge-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .r-badge {
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .r-badge-primary {
+            background: rgba(8, 145, 178, 0.08);
+            color: var(--accent);
+            border: 1px solid rgba(8, 145, 178, 0.15);
+        }
+
+        .r-badge-secondary {
+            background: rgba(124, 58, 237, 0.08);
+            color: var(--secondary);
+            border: 1px solid rgba(124, 58, 237, 0.15);
+        }
+
+        .repo-lang-icon {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .repo-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .repo-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .repo-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .repo-meta-info {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            align-items: center;
+        }
+
+        .meta-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .meta-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-javascript { background-color: #eab308; }
+        .dot-html { background-color: #f97316; }
+        .dot-default { background-color: #64748b; }
+
+        .btn-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 10px var(--primary-glow);
+            transition: var(--transition-main);
+            text-align: center;
+            min-height: 44px;
+        }
+
+        .btn-action:hover {
+            opacity: 0.95;
+            transform: translateY(-1.5px);
+            box-shadow: 0 6px 14px var(--primary-glow);
+        }
+
+        /* Copyable Contact Info Card */
+        .card-contact {
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(8, 145, 178, 0.02), rgba(79, 70, 229, 0.02));
+        }
+
+        .contact-icon {
+            font-size: 1.6rem;
+            color: var(--accent);
+            margin-bottom: 0.4rem;
+        }
+
+        .contact-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .contact-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+
+        /* Quote Bento */
+        .card-quote {
+            justify-content: center;
+            font-style: italic;
+            text-align: center;
+            padding: 1.5rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        .quote-icon {
+            font-size: 1.2rem;
+            color: var(--border-hover);
+            margin-bottom: 0.35rem;
+            display: block;
+        }
+
+        /* Stats Card */
+        .card-stats {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            gap: 1rem;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 0.15rem;
+        }
+
+        /* Loading Skeleton */
+        .skeleton-repo {
+            min-height: 270px;
+            background: var(--bg-bento);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .skeleton-line {
+            height: 16px;
+            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+            background-size: 200% 100%;
+            animation: loadingPulse 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        .dark-mode .skeleton-line {
+            background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+            background-size: 200% 100%;
+        }
+
+        @keyframes loadingPulse {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Supabase Database Configuration Modal */
+        .db-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .db-modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .db-modal {
+            background: var(--bg-bento);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .db-modal-overlay.active .db-modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--primary);
+        }
+
+        .modal-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-base);
+            color: var(--text-main);
+            outline: none;
+            font-size: 0.9rem;
+            transition: var(--transition-main);
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-modal-save {
+            flex: 1;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 10px var(--primary-glow);
+            transition: var(--transition-main);
+            min-height: 44px;
+        }
+
+        .btn-modal-save:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        .btn-modal-close {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-main);
+            min-height: 44px;
+        }
+
+        .btn-modal-close:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: var(--text-main);
+        }
+
+        .dark-mode .btn-modal-close:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Error Banner */
+        .error-banner {
+            grid-column: span 4;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .error-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-retry {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-main);
+        }
+
+        .btn-retry:hover {
+            opacity: 0.9;
+        }
+
+        /* Toast Alert Containers */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .toast-msg {
+            background-color: var(--bg-bento);
+            border: 1px solid var(--success);
+            color: var(--text-main);
+            padding: 0.9rem 1.4rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .toast-msg.toast-error {
+            border-color: var(--danger);
+        }
+
+        .toast-msg.toast-error i {
+            color: var(--danger);
+        }
+
+        .toast-msg i {
+            color: var(--success);
+        }
+
+        @keyframes toastIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            padding: 2rem 0 1rem 0;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Breakpoints */
+        @media (max-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .span-4-cols { grid-column: span 3; }
+            .error-banner { grid-column: span 3; }
+        }
+
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: auto;
+            }
+            .span-2-cols, .span-3-cols, .span-4-cols { grid-column: span 2; }
+            .error-banner { grid-column: span 2; }
+            
+            .card-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+            .span-2-cols, .span-3-cols, .span-4-cols { grid-column: span 1; }
+            .error-banner { grid-column: span 1; }
+            
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Soft Ambient Glows -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <header>
+            <div class="logo-group">
+                <div class="logo-icon"><i class="fa-solid fa-compass"></i></div>
+                <div class="logo-text">Eric.Dev</div>
+            </div>
+            <div class="nav-actions">
+                <button class="config-btn" id="db-config-btn" title="Configure Database Connection">
+                    <i class="fa-solid fa-database"></i>
+                </button>
+                <button class="theme-toggle" id="theme-btn">
+                    <i class="fa-solid fa-moon"></i>
+                    <span>Dark Mode</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Bento Grid Board -->
+        <div class="bento-grid" id="main-bento-grid">
+            
+            <!-- Hero / Profile Bento Card -->
+            <div class="bento-card span-3-cols span-2-rows card-profile">
+                <div class="profile-img-container">
+                    <div class="profile-glow"></div>
+                    <img src="https://avatars.githubusercontent.com/u/278893907?v=4" alt="Developer Avatar" class="profile-img">
+                </div>
+                <div class="profile-details">
+                    <div class="badge-dev"><i class="fa-solid fa-database"></i> Supabase Live DB Mode</div>
+                    <h1 class="profile-name">Eric (03200906ericeric-cmd)</h1>
+                    <p class="profile-desc">
+                        A frontend engineer specializing in clean, professional layouts, custom interactive widgets, and automated agentic coding. Designing modern user interfaces following premium visual standards and fast interaction models.
+                    </p>
+                    <div class="profile-meta-tags">
+                        <div class="meta-tag"><i class="fa-solid fa-location-dot"></i><span>Taiwan</span></div>
+                        <div class="meta-tag"><i class="fa-solid fa-envelope"></i><span>03200906ericeric-cmd@noreply.com</span></div>
+                        <div class="meta-tag"><i class="fa-brands fa-github"></i><span>03200906ericeric-cmd</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Clock Card -->
+            <div class="bento-card card-clock">
+                <div>
+                    <div class="clock-time" id="clock-time">00:00:00</div>
+                    <div class="clock-date" id="clock-date">Taipei, Taiwan</div>
+                </div>
+                <div class="clock-greeting" id="clock-greeting">Loading...</div>
+            </div>
+
+            <!-- Copyable Email Card -->
+            <div class="bento-card card-contact" id="email-card">
+                <div class="contact-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                <div>
+                    <div class="contact-title">Copy Contact Info</div>
+                    <div class="contact-sub">03200906ericeric-cmd@noreply.com</div>
+                </div>
+            </div>
+
+            <!-- Tech Stack Filter (Tags populated dynamically) -->
+            <div class="bento-card span-2-cols card-skills">
+                <div class="card-skills-title">
+                    <i class="fa-solid fa-cubes"></i>
+                    <span>Interactive Filter Tools</span>
+                </div>
+                <div class="skills-container" id="filter-badges-container">
+                    <button class="filter-badge active" data-filter="all"><i class="fa-solid fa-list"></i> Show All</button>
+                    <!-- Badges populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="bento-card card-stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="repo-count-val">-</div>
+                    <div class="stat-label">Repositories</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Supabase</div>
+                </div>
+            </div>
+
+            <!-- Developer Quote Bento -->
+            <div class="bento-card card-quote">
+                <span class="quote-icon"><i class="fa-solid fa-quote-left"></i></span>
+                <p>"Database-driven frontend architectures ensure high scalability and real-time synchronization."</p>
+            </div>
+
+            <!-- Repository Cards Container (Populated dynamically) -->
+            <!-- Placeholder Skeletons show first -->
+            <div class="skeleton-repo span-2-cols" id="skeleton-1">
+                <div class="repo-top" style="gap:1rem;">
+                    <div class="skeleton-line" style="width: 40%"></div>
+                    <div class="skeleton-line" style="width: 75%"></div>
+                    <div class="skeleton-line" style="width: 90%"></div>
+                    <div class="skeleton-line" style="width: 50%"></div>
+                </div>
+                <div class="skeleton-line" style="width: 100%; height:44px; margin-top:2rem;"></div>
+            </div>
+
+            <div class="skeleton-repo span-2-cols" id="skeleton-2">
+                <div class="repo-top" style="gap:1rem;">
+                    <div class="skeleton-line" style="width: 40%"></div>
+                    <div class="skeleton-line" style="width: 75%"></div>
+                    <div class="skeleton-line" style="width: 90%"></div>
+                    <div class="skeleton-line" style="width: 50%"></div>
+                </div>
+                <div class="skeleton-line" style="width: 100%; height:44px; margin-top:2rem;"></div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 Eric. All rights reserved.</p>
+            <p>Integrated with <a href="https://supabase.com" target="_blank">Supabase DB</a> &amp; <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill" target="_blank">UI/UX Pro Max</a> design system.</p>
+        </footer>
+
+    </div>
+
+    <!-- DB Setup Modal Overlay -->
+    <div class="db-modal-overlay" id="db-modal-overlay">
+        <div class="db-modal">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa-solid fa-database"></i> Database Connection</h3>
+                <p class="modal-desc">
+                    Connect your portfolio page dynamically to your Supabase project. These keys are stored locally in your browser's local storage and are never uploaded.
+                </p>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="db-url">Supabase Project URL</label>
+                <input type="text" id="db-url" class="form-input" placeholder="https://your-project-id.supabase.co">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="db-key">Supabase Public Anon Key</label>
+                <input type="password" id="db-key" class="form-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-modal-close" id="db-modal-cancel">Cancel</button>
+                <button class="btn-modal-save" id="db-modal-save">Save Connection</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Box -->
+    <div class="toast-container" id="toast-box"></div>
+
+    <script>
+        // Global variables
+        let supabaseClient = null;
+        let originalRepositories = [];
+
+        // UI/UX Theme Toggle
+        const themeBtn = document.getElementById('theme-btn');
+        const themeIcon = themeBtn.querySelector('i');
+        const themeText = themeBtn.querySelector('span');
+
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.className = 'fa-solid fa-sun';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.className = 'fa-solid fa-moon';
+                themeText.textContent = 'Dark Mode';
+            }
+        });
+
+        // Real-time Clock Widget
+        function updateTime() {
+            const timeEl = document.getElementById('clock-time');
+            const greetingEl = document.getElementById('clock-greeting');
+            const now = new Date();
+            
+            // Taipei Time Zone
+            const options = { timeZone: 'Asia/Taipei', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            const timeStr = now.toLocaleTimeString('zh-TW', options);
+            timeEl.textContent = timeStr;
+            
+            // Taipei Hour for greeting
+            const formatter = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Taipei', hour: 'numeric', hour12: false });
+            const hour = parseInt(formatter.format(now));
+
+            let greeting = "Welcome";
+            if (hour >= 5 && hour < 12) greeting = "Good morning";
+            else if (hour >= 12 && hour < 18) greeting = "Good afternoon";
+            else if (hour >= 18 && hour < 22) greeting = "Good evening";
+            else greeting = "Night mode active";
+
+            greetingEl.textContent = greeting;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Copy Contact to Clipboard
+        const emailCard = document.getElementById('email-card');
+        emailCard.addEventListener('click', () => {
+            const email = "03200906ericeric-cmd@noreply.com";
+            navigator.clipboard.writeText(email).then(() => {
+                showToast("Email address copied successfully!", "success");
+            }).catch(err => {
+                showToast("Failed to copy email.", "error");
+            });
+        });
+
+        function showToast(message, type = "success") {
+            const toastBox = document.getElementById('toast-box');
+            const toast = document.createElement('div');
+            toast.className = `toast-msg ${type === 'error' ? 'toast-error' : ''}`;
+            const icon = type === 'error' ? 'fa-solid fa-triangle-exclamation' : 'fa-solid fa-circle-check';
+            toast.innerHTML = `<i class="${icon}"></i> <span>${message}</span>`;
+            toastBox.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // DB Modal Dialog management
+        const dbModalBtn = document.getElementById('db-config-btn');
+        const dbModalOverlay = document.getElementById('db-modal-overlay');
+        const dbModalCancel = document.getElementById('db-modal-cancel');
+        const dbModalSave = document.getElementById('db-modal-save');
+        
+        const dbUrlInput = document.getElementById('db-url');
+        const dbKeyInput = document.getElementById('db-key');
+
+        dbModalBtn.addEventListener('click', () => {
+            // Pre-fill inputs if keys exist in localStorage
+            dbUrlInput.value = localStorage.getItem('SUPABASE_URL') || '';
+            dbKeyInput.value = localStorage.getItem('SUPABASE_ANON_KEY') || '';
+            dbModalOverlay.classList.add('active');
+        });
+
+        dbModalCancel.addEventListener('click', () => {
+            dbModalOverlay.classList.remove('active');
+        });
+
+        dbModalSave.addEventListener('click', () => {
+            const url = dbUrlInput.value.trim();
+            const key = dbKeyInput.value.trim();
+
+            if (!url || !key) {
+                showToast("Please enter both a URL and a Key.", "error");
+                return;
+            }
+
+            localStorage.setItem('SUPABASE_URL', url);
+            localStorage.setItem('SUPABASE_ANON_KEY', key);
+            dbModalOverlay.classList.remove('active');
+            
+            showToast("Database configuration saved. Reloading data...", "success");
+            initializeDatabase();
+        });
+
+        // Parse .env helper
+        function parseEnvFile(envText) {
+            const config = {};
+            const lines = envText.split('\n');
+            for (let line of lines) {
+                line = line.trim();
+                if (line && !line.startsWith('#') && line.includes('=')) {
+                    const parts = line.split('=');
+                    const key = parts[0].trim();
+                    const val = parts[1].trim();
+                    config[key] = val;
+                }
+            }
+            return config;
+        }
+
+        // Main entry point for Supabase initialization
+        async function initializeDatabase() {
+            let supabaseUrl = localStorage.getItem('SUPABASE_URL');
+            let supabaseKey = localStorage.getItem('SUPABASE_ANON_KEY');
+
+            // 1. Try to fetch from local .env first (handy during local development)
+            try {
+                const response = await fetch('.env');
+                if (response.ok) {
+                    const envText = await response.text();
+                    const envConfig = parseEnvFile(envText);
+                    if (envConfig.SUPABASE_URL && envConfig.SUPABASE_ANON_KEY && !envConfig.SUPABASE_URL.includes('your-project-id')) {
+                        supabaseUrl = envConfig.SUPABASE_URL;
+                        supabaseKey = envConfig.SUPABASE_ANON_KEY;
+                        console.log("Loaded Supabase configuration from local .env file");
+                    }
+                }
+            } catch (err) {
+                // If .env is missing or returns 404, we ignore it and proceed to localStorage / prompt
+            }
+
+            // 2. Validate configuration
+            if (!supabaseUrl || !supabaseKey) {
+                // Remove skeletons and show modal
+                hideSkeletons();
+                showEmptyConfigBanner();
+                dbModalOverlay.classList.add('active');
+                return;
+            }
+
+            // 3. Initialize Supabase Client
+            try {
+                supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+                await fetchAndRenderData();
+            } catch (err) {
+                showErrorBanner(`Failed to initialize Supabase client: ${err.message}`);
+            }
+        }
+
+        // Fetch data from Supabase Table
+        async function fetchAndRenderData() {
+            showSkeletons();
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('repositories')
+                    .select('*')
+                    .order('name', { ascending: true });
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    hideSkeletons();
+                    showEmptyDatabaseBanner();
+                    return;
+                }
+
+                originalRepositories = data;
+                hideSkeletons();
+                renderBentoGrid(data);
+                showToast(`Loaded ${data.length} repositories from database!`, "success");
+            } catch (err) {
+                hideSkeletons();
+                showErrorBanner(`Error loading data from Supabase: ${err.message}`);
+            }
+        }
+
+        // Dynamically build and render bento grid
+        function renderBentoGrid(repos) {
+            const grid = document.getElementById('main-bento-grid');
+            
+            // Remove previous repos/banners if any (keep Profile, Clock, Contact, Filter, Stats, Quote)
+            const removableElements = grid.querySelectorAll('.card-repo, .error-banner, .skeleton-repo');
+            removableElements.forEach(el => el.remove());
+
+            // Set Repository count
+            document.getElementById('repo-count-val').textContent = repos.length;
+
+            // Generate tags list dynamically for the filter buttons
+            const allTags = new Set();
+            repos.forEach(r => {
+                if (r.tags && Array.isArray(r.tags)) {
+                    r.tags.forEach(t => allTags.add(t.toLowerCase()));
+                }
+            });
+            renderFilterBadges(Array.from(allTags));
+
+            // Render repo cards
+            repos.forEach(repo => {
+                const tagsAttribute = (repo.tags || []).join(' ');
+                const langClass = (repo.language || 'default').toLowerCase();
+                const langDotClass = `dot-${langClass}`;
+                
+                // Define badges classes
+                let badgeClass = 'r-badge-primary';
+                let badgeIcon = 'fa-solid fa-code';
+                let badgeText = 'Repository';
+
+                if (repo.name === 'Agentic-Coding') {
+                    badgeClass = 'r-badge-primary';
+                    badgeIcon = 'fa-solid fa-gamepad';
+                    badgeText = 'Playable Web Game';
+                } else if (repo.name === 'AgentCoding') {
+                    badgeClass = 'r-badge-secondary';
+                    badgeIcon = 'fa-solid fa-globe';
+                    badgeText = 'Interactive Portfolio';
+                }
+
+                const cardHtml = `
+                    <div class="bento-card span-2-cols card-repo" data-tags="${tagsAttribute}">
+                        <div class="repo-top">
+                            <div class="repo-badge-row">
+                                <span class="r-badge ${badgeClass}"><i class="${badgeIcon}"></i> ${badgeText}</span>
+                                <i class="fa-brands fa-${langClass} repo-lang-icon"></i>
+                            </div>
+                            <h3 class="repo-name">${repo.name}</h3>
+                            <p class="repo-desc">${repo.description || 'No description provided.'}</p>
+                        </div>
+                        <div class="repo-bottom">
+                            <div class="repo-meta-info">
+                                <div class="meta-info-item">
+                                    <span class="meta-dot ${langDotClass}"></span>
+                                    <span>${repo.language || 'Plain Text'}</span>
+                                </div>
+                                <div class="meta-info-item">
+                                    <i class="fa-solid fa-star"></i>
+                                    <span>${repo.stargazers_count} stars</span>
+                                </div>
+                                <div class="meta-info-item">
+                                    <i class="fa-solid fa-code-fork"></i>
+                                    <span>${repo.forks_count} forks</span>
+                                </div>
+                            </div>
+                            <a href="${repo.html_url}" target="_blank" class="btn-action">
+                                <i class="fa-brands fa-github"></i> Explore Codebase
+                            </a>
+                        </div>
+                    </div>
+                `;
+                
+                // Append card to grid
+                grid.insertAdjacentHTML('beforeend', cardHtml);
+            });
+
+            setupFilters();
+        }
+
+        // Generate Filter Badges dynamically
+        function renderFilterBadges(tags) {
+            const container = document.getElementById('filter-badges-container');
+            // Keep only the "Show All" badge
+            container.innerHTML = `<button class="filter-badge active" data-filter="all"><i class="fa-solid fa-list"></i> Show All</button>`;
+            
+            tags.forEach(tag => {
+                let iconClass = 'fa-solid fa-tag';
+                if (tag === 'javascript') iconClass = 'fa-brands fa-js';
+                else if (tag === 'html') iconClass = 'fa-brands fa-html5';
+                else if (tag === 'css') iconClass = 'fa-brands fa-css3-alt';
+                else if (tag === 'audio') iconClass = 'fa-solid fa-volume-high';
+                else if (tag === 'canvas') iconClass = 'fa-solid fa-shapes';
+                else if (tag === 'game') iconClass = 'fa-solid fa-gamepad';
+
+                const badgeHtml = `
+                    <button class="filter-badge" data-filter="${tag}">
+                        <i class="${iconClass}"></i> ${tag}
+                    </button>
+                `;
+                container.insertAdjacentHTML('beforeend', badgeHtml);
+            });
+        }
+
+        // Set up filters click handlers
+        function setupFilters() {
+            const filterBtns = document.querySelectorAll('.filter-badge');
+            const repoCards = document.querySelectorAll('.card-repo');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    repoCards.forEach(card => {
+                        const cardTags = card.getAttribute('data-tags').split(' ');
+                        
+                        if (filterValue === 'all' || cardTags.includes(filterValue)) {
+                            card.style.display = 'flex';
+                            card.style.opacity = '0';
+                            setTimeout(() => {
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                                card.style.transition = 'all 0.3s ease';
+                            }, 50);
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+
+        // Skeleton loading UI control
+        function showSkeletons() {
+            const grid = document.getElementById('main-bento-grid');
+            const removableElements = grid.querySelectorAll('.card-repo, .error-banner');
+            removableElements.forEach(el => el.remove());
+            
+            const skeletonsHtml = `
+                <div class="skeleton-repo span-2-cols" id="skeleton-1">
+                    <div class="repo-top" style="gap:1rem;">
+                        <div class="skeleton-line" style="width: 40%"></div>
+                        <div class="skeleton-line" style="width: 75%"></div>
+                        <div class="skeleton-line" style="width: 90%"></div>
+                        <div class="skeleton-line" style="width: 50%"></div>
+                    </div>
+                    <div class="skeleton-line" style="width: 100%; height:44px; margin-top:2rem;"></div>
+                </div>
+                <div class="skeleton-repo span-2-cols" id="skeleton-2">
+                    <div class="repo-top" style="gap:1rem;">
+                        <div class="skeleton-line" style="width: 40%"></div>
+                        <div class="skeleton-line" style="width: 75%"></div>
+                        <div class="skeleton-line" style="width: 90%"></div>
+                        <div class="skeleton-line" style="width: 50%"></div>
+                    </div>
+                    <div class="skeleton-line" style="width: 100%; height:44px; margin-top:2rem;"></div>
+                </div>
+            `;
+            grid.insertAdjacentHTML('beforeend', skeletonsHtml);
+        }
+
+        function hideSkeletons() {
+            const sk1 = document.getElementById('skeleton-1');
+            const sk2 = document.getElementById('skeleton-2');
+            if (sk1) sk1.remove();
+            if (sk2) sk2.remove();
+        }
+
+        // Banners for missing configuration, missing tables, or error states
+        function showEmptyConfigBanner() {
+            const grid = document.getElementById('main-bento-grid');
+            const html = `
+                <div class="error-banner span-2-cols">
+                    <div class="error-title"><i class="fa-solid fa-plug"></i> Connection Required</div>
+                    <p style="font-size:0.9rem; color:var(--text-muted);">
+                        To display dynamic repositories, please configure your Supabase connection parameters.
+                    </p>
+                    <button class="btn-retry" onclick="document.getElementById('db-modal-overlay').classList.add('active')">
+                        Connect Database
+                    </button>
+                </div>
+            `;
+            grid.insertAdjacentHTML('beforeend', html);
+        }
+
+        function showEmptyDatabaseBanner() {
+            const grid = document.getElementById('main-bento-grid');
+            const html = `
+                <div class="error-banner span-2-cols">
+                    <div class="error-title"><i class="fa-solid fa-folder-open"></i> Empty Database</div>
+                    <p style="font-size:0.9rem; color:var(--text-muted);">
+                        Connected successfully, but the 'repositories' table is empty. Please run the SQL schema in Supabase and execute the local upload_repos.ps1 script.
+                    </p>
+                    <button class="btn-retry" style="background:var(--primary); box-shadow:0 4px 10px var(--primary-glow);" onclick="fetchAndRenderData()">
+                        Refresh Data
+                    </button>
+                </div>
+            `;
+            grid.insertAdjacentHTML('beforeend', html);
+        }
+
+        function showErrorBanner(message) {
+            const grid = document.getElementById('main-bento-grid');
+            const html = `
+                <div class="error-banner span-2-cols">
+                    <div class="error-title"><i class="fa-solid fa-triangle-exclamation"></i> Database Error</div>
+                    <p style="font-size:0.9rem; color:var(--text-muted);">${message}</p>
+                    <div style="display:flex; gap:1rem;">
+                        <button class="btn-retry" onclick="fetchAndRenderData()">Retry</button>
+                        <button class="btn-retry" style="background:var(--primary);" onclick="document.getElementById('db-modal-overlay').classList.add('active')">Reconfigure</button>
+                    </div>
+                </div>
+            `;
+            grid.insertAdjacentHTML('beforeend', html);
+        }
+
+        // Run on load
+        window.addEventListener('DOMContentLoaded', initializeDatabase);
+    </script>
+</body>
+</html>
