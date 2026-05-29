@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eric | GitHub Portfolio</title>
+    <meta name="description" content="Discover the creative web applications, game developments, and agentic coding projects of 03200906ericeric-cmd on GitHub.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.15);
+            --secondary: #a855f7;
+            --accent: #06b6d4;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --card-hover-border: rgba(99, 102, 241, 0.4);
+            --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+            --transition-speed: 0.3s;
+        }
+
+        .light-mode {
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.1);
+            --secondary: #9333ea;
+            --accent: #0891b2;
+            --border-color: rgba(0, 0, 0, 0.06);
+            --card-hover-border: rgba(79, 70, 229, 0.3);
+            --shadow-sm: 0 2px 8px -1px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+            position: relative;
+        }
+
+        /* Decorative background elements */
+        .bg-decor {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.4;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .bg-decor-1 {
+            top: -100px;
+            left: -100px;
+            background: radial-gradient(circle, var(--primary) 0%, rgba(0,0,0,0) 70%);
+        }
+
+        .bg-decor-2 {
+            bottom: -100px;
+            right: -100px;
+            background: radial-gradient(circle, var(--secondary) 0%, rgba(0,0,0,0) 70%);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            position: relative;
+        }
+
+        /* Header / Navbar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-toggle-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 0.6rem 1rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s, background-color var(--transition-speed), border-color var(--transition-speed);
+            backdrop-filter: blur(8px);
+        }
+
+        .theme-toggle-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        /* Profile Hero Section */
+        .hero {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(16px);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto;
+        }
+
+        .avatar-glow {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(10px);
+            opacity: 0.7;
+            animation: pulseGlow 4s infinite alternate;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--bg-color);
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .profile-tag {
+            background: var(--primary-glow);
+            color: var(--primary);
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            width: fit-content;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .profile-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        .profile-bio {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .profile-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .meta-item i {
+            color: var(--primary);
+        }
+
+        .meta-item a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .meta-item a:hover {
+            color: var(--primary);
+        }
+
+        /* Search and Filter Section */
+        .search-section {
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .search-bar-container {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 1rem 1rem 3rem;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 500;
+            outline: none;
+            box-shadow: var(--shadow-sm);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            backdrop-filter: blur(8px);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+
+        /* Repositories Section */
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .repos-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .repo-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(12px);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .repo-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--card-hover-border);
+            box-shadow: var(--shadow-md), 0 10px 30px -15px var(--primary-glow);
+        }
+
+        .repo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .repo-card:hover::before {
+            opacity: 1;
+        }
+
+        .repo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .repo-title-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .repo-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+            width: fit-content;
+            text-transform: uppercase;
+        }
+
+        .badge-game {
+            background: rgba(6, 182, 212, 0.1);
+            color: #06b6d4;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+
+        .badge-site {
+            background: rgba(168, 85, 247, 0.1);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .repo-name {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .repo-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .repo-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .repo-stats {
+            display: flex;
+            gap: 1.25rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .language-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .lang-javascript { background-color: #f1e05a; }
+        .lang-html { background-color: #e34c26; }
+
+        .repo-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .repo-action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .repo-action-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Tech Stack / Skills Section */
+        .skills-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(16px);
+            margin-bottom: 4rem;
+            animation: fadeIn 1.4s ease-out;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+            margin-top: 1.5rem;
+        }
+
+        .skill-badge {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+        }
+
+        .skill-badge:hover {
+            background: var(--primary-glow);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Animation Definitions */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                opacity: 0.5;
+                filter: blur(8px);
+            }
+            100% {
+                opacity: 0.9;
+                filter: blur(14px);
+            }
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+                padding: 2rem;
+            }
+
+            .profile-info {
+                align-items: center;
+            }
+
+            .profile-meta {
+                justify-content: center;
+            }
+
+            .repos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-name {
+                font-size: 2rem;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .logo {
+                text-align: center;
+            }
+
+            .actions {
+                justify-content: center;
+            }
+
+            .avatar-container {
+                width: 180px;
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Orbs -->
+    <div class="bg-decor bg-decor-1"></div>
+    <div class="bg-decor bg-decor-2"></div>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <header>
+            <div class="logo">Eric.Dev</div>
+            <div class="actions">
+                <button class="theme-toggle-btn" id="theme-toggle">
+                    <i class="fa-solid fa-moon"></i>
+                    <span>Dark Mode</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Profile / Hero -->
+        <section class="hero">
+            <div class="avatar-container">
+                <div class="avatar-glow"></div>
+                <img src="https://avatars.githubusercontent.com/u/278893907?v=4" alt="Eric's Avatar" class="avatar">
+            </div>
+            <div class="profile-info">
+                <div class="profile-tag"><i class="fa-solid fa-bolt"></i> Developer Portfolio</div>
+                <h1 class="profile-name">Eric (03200906ericeric-cmd)</h1>
+                <p class="profile-bio">
+                    Creative frontend engineer specializing in high-performance web applications, interactive interfaces, and autonomous agentic coding systems. Exploring the boundaries of gameplay mechanics and beautiful UI designs.
+                </p>
+                <div class="profile-meta">
+                    <div class="meta-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Taiwan</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fa-brands fa-github"></i>
+                        <a href="https://github.com/03200906ericeric-cmd" target="_blank">03200906ericeric-cmd</a>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fa-solid fa-code"></i>
+                        <span>JavaScript / HTML5 / CSS3</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Bar -->
+        <section class="search-section">
+            <div class="search-bar-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="search-input" class="search-input" placeholder="Search repositories by name, language, or topic...">
+            </div>
+        </section>
+
+        <!-- Repositories -->
+        <section class="repositories">
+            <h2 class="section-title">
+                <i class="fa-solid fa-box-archive"></i>
+                Showcase Repositories
+            </h2>
+            
+            <div class="repos-grid" id="repos-grid">
+                
+                <!-- Repo 1: Agentic-Coding -->
+                <div class="repo-card" data-name="agentic-coding tetris game audio canvas" data-lang="javascript">
+                    <div class="repo-header">
+                        <div class="repo-title-container">
+                            <span class="repo-badge badge-game">Playable Game</span>
+                            <h3 class="repo-name">Agentic-Coding</h3>
+                        </div>
+                        <i class="fa-brands fa-js repo-icon"></i>
+                    </div>
+                    <p class="repo-description">
+                        A modern, web-based classic Tetris game crafted autonomously. Includes high-fidelity canvas rendering, Super Rotation System (SRS) wall kicks, ghost pieces, and dynamic retro synthesizer sound effects powered by the Web Audio API.
+                    </p>
+                    <div class="repo-stats">
+                        <div class="stat-item">
+                            <span class="language-dot lang-javascript"></span>
+                            <span>JavaScript</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-star"></i>
+                            <span>0</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-code-fork"></i>
+                            <span>0</span>
+                        </div>
+                    </div>
+                    <a href="https://github.com/03200906ericeric-cmd/Agentic-Coding" target="_blank" class="repo-action-btn">
+                        <i class="fa-brands fa-github"></i> View Repository
+                    </a>
+                </div>
+
+                <!-- Repo 2: AgentCoding -->
+                <div class="repo-card" data-name="agentcoding portfolio homepage pages website" data-lang="html">
+                    <div class="repo-header">
+                        <div class="repo-title-container">
+                            <span class="repo-badge badge-site">Personal Website</span>
+                            <h3 class="repo-name">AgentCoding</h3>
+                        </div>
+                        <i class="fa-brands fa-html5 repo-icon"></i>
+                    </div>
+                    <p class="repo-description">
+                        This stunning developer showcase website. Hosts a premium, glassmorphic layout presenting all projects, integrated with a search-filter engine and designed to be deployed directly onto GitHub Pages.
+                    </p>
+                    <div class="repo-stats">
+                        <div class="stat-item">
+                            <span class="language-dot lang-html"></span>
+                            <span>HTML</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-star"></i>
+                            <span>0</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fa-solid fa-code-fork"></i>
+                            <span>0</span>
+                        </div>
+                    </div>
+                    <a href="https://github.com/03200906ericeric-cmd/AgentCoding" target="_blank" class="repo-action-btn">
+                        <i class="fa-brands fa-github"></i> View Repository
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Tech Stack / Skills -->
+        <section class="skills-section">
+            <h2 class="section-title">
+                <i class="fa-solid fa-layer-group"></i>
+                Technical Toolbox
+            </h2>
+            <div class="skills-grid">
+                <div class="skill-badge"><i class="fa-brands fa-html5" style="color: #e34c26;"></i> HTML5</div>
+                <div class="skill-badge"><i class="fa-brands fa-css3-alt" style="color: #264de4;"></i> CSS3 / Animations</div>
+                <div class="skill-badge"><i class="fa-brands fa-js" style="color: #f1e05a;"></i> JavaScript (ES6+)</div>
+                <div class="skill-badge"><i class="fa-solid fa-palette" style="color: #06b6d4;"></i> Canvas API</div>
+                <div class="skill-badge"><i class="fa-solid fa-wave-square" style="color: #a855f7;"></i> Web Audio API</div>
+                <div class="skill-badge"><i class="fa-brands fa-git-alt" style="color: #f1502f;"></i> Git Version Control</div>
+                <div class="skill-badge"><i class="fa-solid fa-robot" style="color: #10b981;"></i> Agentic Engineering</div>
+                <div class="skill-badge"><i class="fa-solid fa-mobile-screen" style="color: #3b82f6;"></i> Responsive UI Design</div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 Eric. All rights reserved.</p>
+            <p>Designed with ❤️ by <a href="https://github.com/03200906ericeric-cmd" target="_blank">03200906ericeric-cmd</a></p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Theme toggler logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = themeToggleBtn.querySelector('i');
+        const themeText = themeToggleBtn.querySelector('span');
+        
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            
+            if(document.body.classList.contains('light-mode')) {
+                themeIcon.className = 'fa-solid fa-sun';
+                themeText.textContent = 'Light Mode';
+            } else {
+                themeIcon.className = 'fa-solid fa-moon';
+                themeText.textContent = 'Dark Mode';
+            }
+        });
+
+        // Search engine logic
+        const searchInput = document.getElementById('search-input');
+        const repoCards = document.querySelectorAll('.repo-card');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            
+            repoCards.forEach(card => {
+                const name = card.getAttribute('data-name');
+                const lang = card.getAttribute('data-lang');
+                
+                if (name.includes(query) || lang.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
